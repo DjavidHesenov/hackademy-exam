@@ -15,6 +15,10 @@ const SignIn: React.FC = () => {
         history.push('/user/forgot')
     }
 
+    const signInHandler = () => {
+        history.push('/todo/lists')
+    }
+    
     return (
         <div className={formStyles.dino_bg}>
             <form className={`${formStyles.form} filter drop-shadow-xl p-12 flex flex-col`}>
@@ -34,7 +38,7 @@ const SignIn: React.FC = () => {
                     <span onClick={forgotHandler} className={`text-sm font-roboto font-medium hover:underline cursor-pointer`}>Forgot password?</span>
                 </div>
                 <div className="flex justify-end">
-                    <button className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm">
+                    <button onClick={signInHandler} className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm">
                         Sign In
                     </button>
                 </div>

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 
 import logo from "../img/logo-white.png";
-import goBack from "../img/next_1.png";
 import globe from "../img/Vector_2.png";
 import setting from "../img/Vector.png";
 import cog from "../img/cog.png";
-import plus from "../img/iconmonstr-plus-2_1.png";
 import profile from "../img/Profile.png";
 import logOut from "../img/Log_Out.png";
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-const TodoLeft = () => {
+const TodoLeft: React.FC = () => {
   const [settings, setSettings] = useState("hidden");
   const settingHandler = () => {
     if (settings === "hidden") {
       setSettings(
-        "block absolute translate-x-44 -translate-y-32 p-4 bg-white w-44 rounded-md border-[1px] border-gray-200 shadow-md"
+        "block flex flex-col absolute translate-x-2/3 -translate-y-[120%] bg-white w-[11%] rounded-md border-[1px] border-gray-200 shadow-md"
       );
     } else {
       setSettings("hidden");
@@ -29,12 +30,19 @@ const TodoLeft = () => {
       <div className="lists h-4/5">
         <div className="button">
           <button>
-            <img src={goBack} alt="go Back" className="w-6 h-6" />
+            <FontAwesomeIcon
+              icon={faChevronLeft}
+              className="w-6 h-6"
+            />
           </button>
         </div>
         <div className="items py-1">
           <button className="flex items-center">
-            <img src={plus} alt="add" className="w-6 h-6" />
+            {/* <img src={plus} alt="add" className="w-6 h-6" /> */}
+            <FontAwesomeIcon
+              icon={faPlus}
+              className="w-6 h-6"
+            />
             <p className="ml-4 font-medium text-xl">New List</p>
           </button>
         </div>
@@ -42,11 +50,11 @@ const TodoLeft = () => {
 
       <div className="flex flex-col">
         <div className={settings}>
-          <button className="flex items-center mb-2">
+          <button className="flex items-center mb-2 p-2 hover:bg-slate-200 cursor-pointer">
             <img src={profile} alt="profile" />
             <p className="text-gray-400 pl-4 text-xl">Profile</p>
           </button>
-          <button className="flex items-center">
+          <button className="flex items-center p-2 hover:bg-slate-200 cursor-pointer">
             <img src={logOut} alt="log out" />
             <p className="text-gray-400 pl-4 text-xl">Log out</p>
           </button>
