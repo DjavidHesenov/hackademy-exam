@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 
 import logo from "../img/logo-white.png";
 import globe from "../img/Vector_2.png";
@@ -12,6 +13,9 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const TodoLeft: React.FC = () => {
   const [settings, setSettings] = useState("hidden");
+
+  const history = useHistory()
+
   const settingHandler = () => {
     if (settings === "hidden") {
       setSettings(
@@ -21,6 +25,10 @@ const TodoLeft: React.FC = () => {
       setSettings("hidden");
     }
   };
+
+  const logOutHandler = () => {
+    history.push("/user/signin")
+  }
 
   return (
     <div className="w-[18%] h-screen bg-yellow-300 p-5 flex flex-col justify-between">
@@ -54,7 +62,7 @@ const TodoLeft: React.FC = () => {
             <img src={profile} alt="profile" />
             <p className="text-gray-400 pl-4 text-xl">Profile</p>
           </button>
-          <button className="flex items-center p-2 hover:bg-slate-200 cursor-pointer">
+          <button onClick={logOutHandler} className="flex items-center p-2 hover:bg-slate-200 cursor-pointer">
             <img src={logOut} alt="log out" />
             <p className="text-gray-400 pl-4 text-xl">Log out</p>
           </button>
