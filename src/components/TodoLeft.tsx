@@ -10,11 +10,14 @@ import logOut from "../img/Log_Out.png";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import hambMenu from '../img/hamb-menu.png'
+import trash from '../img/trash.png'
 
 const TodoLeft: React.FC = () => {
   const [settings, setSettings] = useState("hidden");
   const [addItem, setAddItem] = useState("New List");
   const [onFocus, setOnFocus] = useState(false);
+  const [isListEmpty, setIsListEmpty] = useState<any>([]);
 
   const history = useHistory()
 
@@ -42,17 +45,45 @@ const TodoLeft: React.FC = () => {
     setOnFocus(true);
   };
 
+  const deleteHandler = (e: any) => {
+    // setIsListEmpty(isListEmpty.filter((x: any) => x[e.target.id] !== x[e.target.id] ))
+    setIsListEmpty((
+      isListEmpty.filter((x: any) => {
+        let item = isListEmpty[e.target.id]
+        return x !== item
+      })
+    ))
+  };
+
+
   return (
     <div className="w-[18%] h-screen bg-yellow-300 p-5 flex flex-col justify-between">
       <div className="icon">
         <img src={logo} alt="Logo" className="w-10 h-[28px]" />
       </div>
-      <div className="lists h-4/5">
+      <div className="lists h-4/5 flex flex-col relative">
         <div className="button">
           <button>
             <FontAwesomeIcon icon={faChevronLeft} className="w-6 h-6" />
           </button>
         </div>
+        {
+          isListEmpty ? isListEmpty.map((item: any, i: any) => {
+            return (
+              <div key={i}>
+                <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-yellow-300 hover:bg-white flex justify-between items-center">
+                  <div className="flex">
+                    <img src={hambMenu} width="24px" alt="Hamb" className="mr-4" />
+                    {item}
+                  </div>
+                  <div onClick={(e) => deleteHandler(e)}>
+                    <img src={trash} id={i} width="24px" alt="Trash" className="ml-[20%] hover:bg-red-500 rounded cursor-pointer" />
+                  </div>
+                </div>
+              </div>
+            )
+          }) : ""
+        }
         <div className="items py-1 ">
           <div
             className={
@@ -78,6 +109,7 @@ const TodoLeft: React.FC = () => {
               <button
                 className="font-medium text-xl text-yellow-300"
                 onClick={() => {
+                  setIsListEmpty((prevObj: any) => [...prevObj, addItem])
                   setAddItem("New List");
                   setOnFocus(false);
                 }}
