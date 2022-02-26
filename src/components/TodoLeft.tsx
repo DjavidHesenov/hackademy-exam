@@ -182,7 +182,7 @@ const TodoLeft: React.FC = () => {
           </button>
         </div>
         <div
-          className={`options   ${
+          className={`options ${
             open
               ? "sm:px-5 md:flex justify-evenly"
               : "flex flex-col items-center"
