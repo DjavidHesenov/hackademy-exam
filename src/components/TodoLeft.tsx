@@ -57,7 +57,7 @@ const TodoLeft: React.FC = () => {
 
 
   return (
-    <div className="w-[18%] h-screen bg-yellow-300 p-5 flex flex-col justify-between">
+    <div className="w-[18%] h-screen bg-[#FCD620] p-5 flex flex-col justify-between">
       <div className="icon">
         <img src={logo} alt="Logo" className="w-10 h-[28px]" />
       </div>
@@ -71,7 +71,7 @@ const TodoLeft: React.FC = () => {
           isListEmpty ? isListEmpty.map((item: any, i: any) => {
             return (
               <div key={i}>
-                <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-yellow-300 hover:bg-white flex justify-between items-center">
+                <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] hover:bg-white flex justify-between items-center">
                   <div className="flex">
                     <img src={hambMenu} width="24px" alt="Hamb" className="mr-4" />
                     {item}
@@ -87,7 +87,7 @@ const TodoLeft: React.FC = () => {
         <div className="items py-1 ">
           <div
             className={
-              "flex items-center " + (onFocus ? "bg-white " : "bg-yellow-300")
+              "flex items-center " + (onFocus ? "bg-white " : "bg-[#FCD620]")
             }
             onFocus={focusHandler}
             onBlur={(e) => {
@@ -102,12 +102,12 @@ const TodoLeft: React.FC = () => {
             <input
               type="text"
               value={addItem}
-              className="ml-2 p-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-yellow-300 focus:bg-white "
+              className="ml-2 p-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] focus:bg-white "
               onChange={listInputChangeHandler}
             />
             {onFocus && (
               <button
-                className="font-medium text-xl text-yellow-300"
+                className="font-medium text-xl text-[#FCD620]"
                 onClick={() => {
                   setIsListEmpty((prevObj: any) => [...prevObj, addItem])
                   setAddItem("New List");
