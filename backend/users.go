@@ -1,0 +1,97 @@
+package main
+
+import (
+	"crypto/md5"
+	"encoding/json"
+	"errors"
+	"net/http"
+	"net/mail"
+)
+
+type User struct {
+	Email          string
+	PasswordDigest string
+	IdToList       map[uint32]*List
+	IdToListHead   map[uint32]*ListHead
+}
+type UserRepository interface {
+	Add(string, User) error
+	Get(string) (User, error)
+	Update(string, User) error
+	Delete(string) (User, error)
+}
+
+type UserService struct {
+	repository UserRepository
+}
+type UserRegisterParams struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func validateEmail(email string) error {
+	if _, err := mail.ParseAddress(email); err != nil {
+		return errors.New("provide an email")
+	}
+	return nil
+}
+
+func validatePassword(password string) error {
+	if len(password) < 5 {
+		return errors.New("password must have at least 5 symbols")
+	}
+	return nil
+}
+
+func validateRegisterParams(p *UserRegisterParams) error {
+	var err = validatePassword(p.Password)
+	if err != nil {
+		return err
+	}
+
+	err = validateEmail(p.Email)
+	return err
+}
+
+func (u *UserService) Register(w http.ResponseWriter, r *http.Request) {
+	params := &UserRegisterParams{}
+	err := json.NewDecoder(r.Body).Decode(params)
+	if err != nil {
+		handleUnprocError(errors.New("could not read params"), w)
+		return
+	}
+
+	if err := validateRegisterParams(params); err != nil {
+		handleUnprocError(err, w)
+		return
+	}
+
+	passwordDigest := md5.New().Sum([]byte(params.Password))
+	newUser := User{
+		Email:          params.Email,
+		PasswordDigest: string(passwordDigest),
+		IdToListHead:   make(map[uint32]*ListHead),
+		IdToList:       make(map[uint32]*List),
+	}
+
+	err = u.repository.Add(params.Email, newUser)
+	if err != nil {
+		handleUnprocError(err, w)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	_, _ = w.Write([]byte("registered"))
+}
+
+func handleUnprocError(err error, w http.ResponseWriter) {
+	handleError(err, 422, w)
+}
+
+func handleUnauthError(err error, w http.ResponseWriter) {
+	handleError(err, 401, w)
+}
+
+func handleError(err error, status int, w http.ResponseWriter) {
+	w.WriteHeader(status)
+	_, _ = w.Write([]byte(err.Error()))
+}
