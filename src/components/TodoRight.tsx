@@ -24,7 +24,7 @@ const TodoRight: React.FC = () => {
                     <Profile />
                 </div>
             </div>
-            <div className={true ? "down flex flex-row h-[91.3%]" : "down justify-center items-center mt-[20%]"}>
+            <div className={reduxData.name ? "down flex flex-row h-[91.3%]" : "down justify-center items-center mt-[20%]"}>
                 {
                     true ?
                         <ListItem reduxData={reduxData} />

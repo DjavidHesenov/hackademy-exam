@@ -22,7 +22,7 @@ const ListItem: React.FC<Props> = ({ reduxData }) => {
 
     return (
         <>
-            {false ? (
+            {!reduxData.name ? (
                 <div className="down justify-center items-center mt-[20%]">
                     <div className="down-no-list text-center">
                         <p className="text-[#FCD620] font-semibold">List not found</p>

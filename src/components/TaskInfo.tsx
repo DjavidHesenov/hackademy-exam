@@ -19,7 +19,7 @@ const TaskInfo: React.FC = () => {
                     ) : (
                         <img src={selected} alt="selected" />
                     )}
-                    <input className="p-3 font-medium" value={reduxData.name}/>
+                    <input onBlur={() => console.log('sex')} className="p-3 font-medium" value={reduxData?.name}/>
                 </div>
                 <div className="item-top__bottom h-[70%]">
                     <textarea className="p-3 w-[100%] h-[100%] resize-none outline-none" placeholder="Description" />
