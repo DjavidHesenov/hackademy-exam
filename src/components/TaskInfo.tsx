@@ -2,8 +2,10 @@ import { faChevronRight, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import elips from "../img/Ellipse_1.png";
 import selected from "../img/Group_7_1.png";
+import { useSelector } from "react-redux";
 
 const TaskInfo: React.FC = () => {
+    const reduxData = useSelector((state: any) => state.data.data)
     return (
         <div className="w-[30%] bg-[#FCD620] flex flex-col justify-between">
             <div className="item-top h-[50%] p-2">
@@ -17,7 +19,7 @@ const TaskInfo: React.FC = () => {
                     ) : (
                         <img src={selected} alt="selected" />
                     )}
-                    <input className="p-3 font-medium" value={"Item 1"}/>
+                    <input className="p-3 font-medium" value={reduxData.name}/>
                 </div>
                 <div className="item-top__bottom h-[70%]">
                     <textarea className="p-3 w-[100%] h-[100%] resize-none outline-none" placeholder="Description" />

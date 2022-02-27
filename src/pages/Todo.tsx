@@ -6,12 +6,13 @@ import axios from '../api/axios';
 import { setUpBearerHeader } from '../api/auth';
 
 const Todo: React.FC = () => {
+
+
   const [data, setData] = useState([])
   async function fetchData() {
     const response = await loadListHeads();
     setData(response?.data)
     if (response.status === 200) {
-      // dispatch({ type: 'set', listHeads: response.data })
       setUpBearerHeader(axios);
       console.log("Authorized. ", response.data);
     } else {

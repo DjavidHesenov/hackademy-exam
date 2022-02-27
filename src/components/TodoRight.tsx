@@ -1,8 +1,10 @@
 import search from "../img/search.png";
 import ListItem from "./ListItem";
 import Profile from './Profile'
+import { useSelector } from "react-redux";
 
 const TodoRight: React.FC = () => {
+    const reduxData = useSelector((state: any) => state.data.data)
     return (
         <div className="rightSide h-screen w-[100%]">
             <div className="upper flex items-center justify-between border-b-[1px] border-[#E5E7EB]">
@@ -25,7 +27,7 @@ const TodoRight: React.FC = () => {
             <div className={true ? "down flex flex-row h-[91.3%]" : "down justify-center items-center mt-[20%]"}>
                 {
                     true ?
-                            <ListItem />
+                        <ListItem reduxData={reduxData} />
                         :
                         (
                             <div className="down-no-list text-center">

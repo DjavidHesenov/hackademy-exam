@@ -6,13 +6,17 @@ import TaskInfo from "./TaskInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faICursor, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
+interface Props {
+    reduxData: any
+}
+
 let dummy = [
     {
         firstList: { listName: "First List", items: ["mi", "Ye", "go"] },
     },
 ];
 
-const ListItem: React.FC = () => {
+const ListItem: React.FC<Props> = ({ reduxData }) => {
     const [taskInfoOpen, setTaskInfoOpen] = useState(false);
     const [listOptions, setListOptions] = useState(false);
 
@@ -33,7 +37,7 @@ const ListItem: React.FC = () => {
                     <div className="down flex flex-col w-[100%]">
                         <div className="card w-[100%] flex justify-start items-center p-4">
                             <h1 className="font-bold text-2xl">
-                                {dummy[0]["firstList"]["listName"]}
+                                {reduxData.name}
                             </h1>
                             <button
                                 onClick={() => {

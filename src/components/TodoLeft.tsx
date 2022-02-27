@@ -16,6 +16,8 @@ import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import hambMenu from "../img/hamb-menu.png";
 import { signOut } from "../api/auth";
 import { createList, deleteList } from '../api/lists'
+import { useDispatch } from 'react-redux'
+import { dataActions } from '../store/auth'
 
 interface Props {
   data: any,
@@ -23,15 +25,18 @@ interface Props {
 }
 
 const TodoLeft: React.FC<Props> = ({ data, fetchData }) => {
+
+  const dispatch = useDispatch()
+
   const [open, setOpen] = useState(true);
   const [settings, setSettings] = useState("hidden");
   const [addItem, setAddItem] = useState("New List");
   const [onFocus, setOnFocus] = useState(false);
   const [fetchedData, setFetchedData] = useState([])
 
-useEffect(() => {
-  setFetchedData(data)
-}, [data])
+  useEffect(() => {
+    setFetchedData(data)
+  }, [data])
 
   const history = useHistory();
 
@@ -99,7 +104,8 @@ useEffect(() => {
           ? fetchedData?.map((data: any) => {
             return (
               <div key={data.id}>
-                <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] hover:bg-white flex justify-between items-center">
+
+                <div onClick={() => { dispatch(dataActions.setData(data)) }} className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] hover:bg-white cursor-pointer flex justify-between items-center">
                   <div className="flex items-center ">
                     <img
                       src={hambMenu}
@@ -110,7 +116,7 @@ useEffect(() => {
                     {open && data.name}
                   </div>
                   {open && (
-                    <div onClick={() => {deleteList(data.id); fetchData()}}>
+                    <div onClick={() => { deleteList(data.id); fetchData() }}>
                       <FontAwesomeIcon
                         id={data.id}
                         icon={faTrashAlt}
