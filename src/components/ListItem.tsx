@@ -32,12 +32,7 @@ const ListItem: React.FC = () => {
                 <>
                     <div className="down flex flex-col w-[100%]">
                         <div className="card w-[100%] flex justify-start items-center p-4">
-                            <h1
-                                onClick={() => {
-                                    setTaskInfoOpen((prev) => !prev);
-                                }}
-                                className="font-bold text-2xl"
-                            >
+                            <h1 className="font-bold text-2xl">
                                 {dummy[0]["firstList"]["listName"]}
                             </h1>
                             <button
@@ -58,7 +53,11 @@ const ListItem: React.FC = () => {
                                             size="lg"
                                             className="hover:text-gray-700 cursor-pointer focus:outline-none"
                                         />
-                                        <p>Rename List</p>
+                                        <p
+                                            onClick={() => {
+                                                setTaskInfoOpen((prev) => !prev);
+                                            }} >Rename List
+                                        </p>
                                     </button>
                                     <button className="m-1 p-2 flex justify-evenly items-center text-red-500 bg-red-50 hover:bg-red-200">
                                         <FontAwesomeIcon
