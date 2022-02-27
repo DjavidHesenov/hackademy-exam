@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import logo from "../img/logo-white.png";
@@ -12,30 +12,40 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import hambMenu from "../img/hamb-menu.png";
-import trash from "../img/trash.png";
+import { signOut } from "../api/auth";
+import { createList, deleteList } from '../api/lists'
 
-const TodoLeft: React.FC = () => {
+interface Props {
+  data: any,
+  fetchData: any
+}
+
+const TodoLeft: React.FC<Props> = ({ data, fetchData }) => {
   const [open, setOpen] = useState(true);
   const [settings, setSettings] = useState("hidden");
   const [addItem, setAddItem] = useState("New List");
   const [onFocus, setOnFocus] = useState(false);
-  const [isListEmpty, setIsListEmpty] = useState<any>([]);
+  const [fetchedData, setFetchedData] = useState([])
+
+useEffect(() => {
+  setFetchedData(data)
+}, [data])
 
   const history = useHistory();
 
   const logoutHandler = () => {
-    history.push("/user/signin");
+    signOut();
+    history.push('/user/signin')
   };
 
   const settingHandler = () => {
     if (settings === "hidden") {
       setSettings(
-        `block flex flex-col absolute ${
-          open
-            ? "translate-x-2/3 -translate-y-[120%]"
-            : "translate-x-1/3 -translate-y-[20%]"
+        `block flex flex-col absolute ${open
+          ? "translate-x-2/3 -translate-y-[120%]"
+          : "translate-x-1/3 -translate-y-[20%]"
         } bg-white w-[11%] rounded-md border-[1px] border-gray-200 shadow-md`
       );
     } else {
@@ -53,31 +63,18 @@ const TodoLeft: React.FC = () => {
     setOnFocus(true);
   };
 
-  const deleteHandler = (e: any) => {
-    // setIsListEmpty(isListEmpty.filter((x: any) => x[e.target.id] !== x[e.target.id] ))
-    setIsListEmpty(
-      isListEmpty.filter((x: any) => {
-        let item = isListEmpty[e.target.id];
-        return x !== item;
-      })
-    );
-  };
-
   return (
     <div
-      className={`${
-        !open ? "w-[6%]" : "w-[18%]"
-      } h-screen bg-[#FCD620] p-5 flex flex-col justify-between ${
-        !open && "items-center"
-      }`}
+      className={`${!open ? "w-[6%]" : "w-[18%]"
+        } h-screen bg-[#FCD620] p-5 flex flex-col justify-between ${!open && "items-center"
+        }`}
     >
       <div className="icon">
         <img src={logo} alt="Logo" className="w-10 h-[28px] min-w-max" />
       </div>
       <div
-        className={`lists ${
-          open ? "h-4/5" : "h-[70%]"
-        } flex flex-col relative `}
+        className={`lists ${open ? "h-4/5" : "h-[70%]"
+          } flex flex-col relative `}
       >
         <div className="button">
           <button
@@ -98,35 +95,33 @@ const TodoLeft: React.FC = () => {
             )}
           </button>
         </div>
-        {isListEmpty
-          ? isListEmpty.map((item: any, i: any) => {
-              return (
-                <div key={i}>
-                  <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] hover:bg-white flex justify-between items-center">
-                    <div className="flex">
-                      <img
-                        src={hambMenu}
-                        width="24px"
-                        alt="Hamb"
-                        className="mr-4 min-w-[24px] max-h-[28px] fill-black"
-                      />
-                      {open && item}
-                    </div>
-                    {open && (
-                      <div onClick={(e) => deleteHandler(e)}>
-                        <img
-                          src={trash}
-                          id={i}
-                          width="24px"
-                          alt="Trash"
-                          className="ml-[20%] hover:bg-red-500 rounded cursor-pointer min-w-[24px] min-h-[24px]"
-                        />
-                      </div>
-                    )}
+        {fetchedData
+          ? fetchedData?.map((data: any) => {
+            return (
+              <div key={data.id}>
+                <div className="p-1 pr-1 my-1 w-[75%] text-slate-900 font-medium text-xl rounded-md bg-[#FCD620] hover:bg-white flex justify-between items-center">
+                  <div className="flex items-center ">
+                    <img
+                      src={hambMenu}
+                      width="24px"
+                      alt="Hamb"
+                      className="mr-4 min-w-[24px] max-h-[28px] fill-black"
+                    />
+                    {open && data.name}
                   </div>
+                  {open && (
+                    <div onClick={() => {deleteList(data.id); fetchData()}}>
+                      <FontAwesomeIcon
+                        id={data.id}
+                        icon={faTrashAlt}
+                        className="ml-[20%] hover:bg-red-500 rounded cursor-pointer min-w-[20px] min-h-[20px]"
+                      />
+                    </div>
+                  )}
                 </div>
-              );
-            })
+              </div>
+            );
+          })
           : ""}
         <div className="items py-1 pl-1">
           <div
@@ -154,10 +149,13 @@ const TodoLeft: React.FC = () => {
             {onFocus && (
               <button
                 className="font-medium text-xl text-[#FCD620]"
-                onClick={() => {
-                  setIsListEmpty((prevObj: any) => [...prevObj, addItem]);
+                onClick={async () => {
+                  const listHead = await createList(addItem);
+                  console.log('head', listHead)
+                  // setIsListEmpty((prevObj: any) => [...prevObj, addItem]);
                   setAddItem("New List");
                   setOnFocus(false);
+                  fetchData()
                 }}
               >
                 Add
@@ -182,11 +180,10 @@ const TodoLeft: React.FC = () => {
           </button>
         </div>
         <div
-          className={`options ${
-            open
-              ? "sm:px-5 md:flex justify-evenly"
-              : "flex flex-col items-center"
-          }`}
+          className={`options ${open
+            ? "sm:px-5 md:flex justify-evenly"
+            : "flex flex-col items-center"
+            }`}
         >
           <button>
             <img src={setting} alt="set" className="my-2 min-w-max" />

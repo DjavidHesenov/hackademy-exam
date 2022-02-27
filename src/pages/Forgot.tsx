@@ -11,6 +11,10 @@ const Forgot: React.FC = () => {
         history.push('/user/signin')
     }
 
+    const signInHandler = (e: React.FormEvent<EventTarget>) => {
+        e.preventDefault()
+    }
+
     return (
         <div className={formStyles.dino_bg}>
             <form className={`${formStyles.form} filter drop-shadow-xl p-12 flex flex-col`}>
@@ -28,7 +32,7 @@ const Forgot: React.FC = () => {
                     <button onClick={backHandler} className="bg-[#B8B8B8] hover:bg-gray-500 text-black py-2 px-12 text-sm">
                         Back
                     </button>
-                    <button className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm ml-3">
+                    <button onClick={signInHandler} className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm ml-3">
                         Sign Up
                     </button>
                 </div>

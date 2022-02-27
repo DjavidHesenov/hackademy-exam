@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import formStyles from '../styles/Forms.module.css'
 import logoYellow from '../img/logo-yellow.png'
 import { useHistory } from 'react-router-dom';
+import isAuthenticated, { signIn } from '../api/auth'
 
 const SignIn: React.FC = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    useEffect(() => { isAuthenticated() && history.push('/todo/lists') })
 
     const history = useHistory()
-    
+
     const createHandler = () => {
         history.push('/user/signup')
     }
@@ -15,10 +20,19 @@ const SignIn: React.FC = () => {
         history.push('/user/forgot')
     }
 
-    const signInHandler = () => {
-        history.push('/todo/lists')
+    const signInHandler = async (e: React.FormEvent<EventTarget>) => {
+        e.preventDefault()
+        if (email === "" || password === "") {
+            return
+        }
+        const response = await signIn(email, password) 
+        if (response) {
+            history.push('/todo/lists')
+        } else {
+            return
+        }
     }
-    
+
     return (
         <div className={formStyles.dino_bg}>
             <form className={`${formStyles.form} filter drop-shadow-xl p-12 flex flex-col`}>
@@ -29,8 +43,8 @@ const SignIn: React.FC = () => {
                     </div>
                     <span className={`text-2xl font-roboto font-medium`}>Sign In</span>
                     <div className="flex flex-col">
-                        <input className="border-b-2 border-b-gray mb-5 mt-5 focus:border-b-[#FDC620]" placeholder="Email" />
-                        <input className="border-b-2 outline-b-gray-300 focus:border-b-[#FDC620]" placeholder="Password" />
+                        <input className="border-b-2 border-b-gray mb-5 mt-5 focus:border-b-[#FDC620]" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                        <input className="border-b-2 outline-b-gray-300 focus:border-b-[#FDC620]" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
                     </div>
                     <span className={`text-sm font-roboto font-medium`}>No account?</span>
                     <span onClick={createHandler} className={`text-sm font-roboto text-[#FCD620] pl-2 hover:underline cursor-pointer `}>Create one!</span>
@@ -38,7 +52,7 @@ const SignIn: React.FC = () => {
                     <span onClick={forgotHandler} className={`text-sm font-roboto font-medium hover:underline cursor-pointer`}>Forgot password?</span>
                 </div>
                 <div className="flex justify-end">
-                    <button onClick={signInHandler} className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm">
+                    <button onClick={(e) => signInHandler(e)} className="bg-[#FCD620] hover:bg-yellow-600 text-black py-2 px-10 text-sm">
                         Sign In
                     </button>
                 </div>
